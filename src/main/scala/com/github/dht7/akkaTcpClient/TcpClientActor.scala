@@ -32,12 +32,12 @@ class TcpClientActor(remote: InetSocketAddress, listener: ActorRef) extends Acto
 
       context.become {
         case data: ByteString =>
-          listener ! "Sending message: " + data.utf8String
+          listener ! "Sending message: " + data.utf8String.trim
           connection ! Write(data)
         case CommandFailed(w: Write) =>
           listener ! "Write operation failed"
         case Received(data) =>
-          listener ! "Received message: " + data.utf8String
+          listener ! "Received message: " + data.utf8String.trim
         case "close" =>
           listener ! "Close command received"
           connection ! Close
